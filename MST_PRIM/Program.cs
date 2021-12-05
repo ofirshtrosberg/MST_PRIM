@@ -5,7 +5,6 @@ namespace MST_PRIM
 {
     class Program
     {
-        
         public static UndirectedGraph MST_prim(UndirectedGraph graph, int startVertexIndex)
         {
             var mst = new UndirectedGraph(graph.NumOfVertex);
@@ -48,7 +47,7 @@ namespace MST_PRIM
                 }
             }
             mst.printGraph();
-            graph.PrintMstByParents(parents);
+           // graph.PrintMstByParents(parents);
             return mst;
         }
         // maybe need to initialize to null all the vertices parents
@@ -85,42 +84,34 @@ namespace MST_PRIM
         //    }
         //    graph.PrintMstByParents(parents);
         //}
-        public static List<int> tryFindCircle(UndirectedGraph mstGraph, int vertexU)
+        public static List<int> tryFindCircle(UndirectedGraph mstGraph, int parent, List<int> circleList)
         {
-            List<int> circleList = new List<int>();
             List<int> foundResult = new List<int>();
-            mstGraph.setColor(vertexU, 'g');
-            int firstVertexInCircle = -1;
-            bool foundCircle = false;
-            foreach (int vertexV in mstGraph.GetEdges(vertexU))
-            {
-                if (mstGraph.getColorOfVertices()[vertexV] == 'g'
-                    && mstGraph.getPi()[vertexV] != vertexU)
+            mstGraph.setColor(parent, 'g');
+            Console.WriteLine(parent);
+            foreach (int vertexV in mstGraph.GetEdges(parent))
+            {       
+                if ((mstGraph.getColorOfVertices()[vertexV] == 'g') && (mstGraph.getPi()[parent] != vertexV))
                 {
-                    foundCircle = true;
-                    firstVertexInCircle = vertexV;
+                    int firstVertexInCircle = vertexV;
+                    int pointerToCircle = parent;
                     circleList.Add(vertexV);
-                    break;
+                    // the parent of the 
+                    while (pointerToCircle != -1 && pointerToCircle!=mstGraph.getPi()[firstVertexInCircle])
+                    {
+                        circleList.Add(pointerToCircle);
+                        pointerToCircle = mstGraph.getPi()[pointerToCircle];
+                    }
+                    mstGraph.setColor(parent, 'b');
+                    return circleList;
                 }
                 if (mstGraph.getColorOfVertices()[vertexV] == 'w')
                 {
-                    mstGraph.setPi(vertexV, vertexU);
-                    foundResult = tryFindCircle(mstGraph, vertexV);
-                    if (foundResult != null)
-                    {
-                        return foundResult;
-                    }
+                    mstGraph.setPi(vertexV, parent);
+                    tryFindCircle(mstGraph, vertexV, circleList);
                 }
             }
-            mstGraph.setColor(vertexU, 'b');
-            if (foundCircle)
-            {
-                while (vertexU != firstVertexInCircle)
-                {
-                    circleList.Add(vertexU);
-                    vertexU = mstGraph.getPi()[vertexU]; // u = pi[u] 
-                }
-            }
+            mstGraph.setColor(parent, 'b');
             return circleList;
         }
         // Check if the new edge creates a circle in the mst graph.
@@ -131,6 +122,7 @@ namespace MST_PRIM
             int secondIndex = dest;
             int maxWeight = weight;
             List<int> circle = new List<int>(); // vertices in the circle
+            List<int> findCircle = new List<int>();
             mstGraph.AddEdge(src, dest, weight);
             // initialize all vertices to be white and their parents to be null (-1)
             for (int i = 0; i < mstGraph.NumOfVertex; i++)
@@ -142,12 +134,12 @@ namespace MST_PRIM
             {
                 if (mstGraph.getColorOfVertices()[i] == 'w')
                 {
-                    circle = tryFindCircle(mstGraph, i);
+                    circle = tryFindCircle(mstGraph, i, findCircle);
                 }
                 //if a circle was found remove the heaviest edge 
                 if (circle.Count != 0)
                 {
-                    Console.WriteLine(String.Join(",",circle));
+                    Console.WriteLine("circle"+String.Join(",",circle));
                     for (int j = 0; j < circle.Count - 1; j++)
                     {
                         if (mstGraph.TryGetWeight(circle[j], circle[j + 1], out int maxWeightNew)
@@ -164,86 +156,13 @@ namespace MST_PRIM
                 }
             }
         }
-        //public static bool SearchEdgeToRemove(UndirectedGraph mstGraph, int vertexU, int src, int dest, int weight)
-        //{
-        //    int pointerToCircle;
-        //    int currPointer;
-        //    int maxWeight = weight;
-        //    int firstIndex = src;
-        //    int secondIndex = dest;
-        //    mstGraph.setColor(vertexU, 'g');
-        //    foreach (int vertexV in mstGraph.GetEdges(vertexU))
-        //    {
-        //        if(mstGraph.getColorOfVertices()[vertexV] == 'g' 
-        //            && mstGraph.getPi()[vertexV]!=vertexU)
-        //        {
-        //            pointerToCircle = vertexU;
-        //            if(mstGraph.TryGetWeight(vertexV, vertexU, out int currWeight)
-        //                && currWeight > maxWeight)
-        //            {
-        //                maxWeight = currWeight;
-        //                firstIndex = vertexV;
-        //                secondIndex = vertexU;
-        //            }
-        //            // problem checking it by parents only. need to check with edges matrix
-        //            currPointer = vertexV;
-        //            while (currPointer != pointerToCircle && currPointer>=0)
-        //            {
-        //                Console.WriteLine("here"+currPointer);
-
-        //                if (mstGraph.TryGetWeight(mstGraph.getPi()[currPointer], currPointer, out int currWeightNew)
-        //                && currWeightNew > maxWeight)
-        //                {
-        //                    maxWeight = currWeightNew;
-        //                    Console.WriteLine("maxweight"+ maxWeight);
-        //                    firstIndex = mstGraph.getPi()[currPointer];
-        //                    secondIndex = currPointer;
-        //                }
-        //                currPointer = mstGraph.getPi()[currPointer];
-        //            }
-        //            mstGraph.setColor(vertexU, 'b');
-        //            mstGraph.RemoveEdge(src, dest);
-        //            return true;
-        //        }
-        //        if(mstGraph.getColorOfVertices()[vertexV] == 'w')
-        //        {
-        //            mstGraph.setPi(vertexV, vertexU);
-        //            SearchEdgeToRemove(mstGraph, vertexV, src, dest, weight);
-        //        }
-        //    }
-        //    mstGraph.setColor(vertexU, 'b');
-        //    return false;
-        //}
-        //public static void UpdateMST(UndirectedGraph mstGraph, int src, int dest, int weight)
-        //{
-        //    mstGraph.AddEdge(src, dest, weight);
-        //    for (int i = 0; i < mstGraph.NumOfVertex; i++)
-        //    {
-        //        mstGraph.setColor(i,'w');
-        //        mstGraph.setPi(i, -1); //pi[i]=null
-        //    }
-        //    for (int i = 0; i < mstGraph.NumOfVertex; i++)
-        //    {
-        //        if (mstGraph.getColorOfVertices()[i] == 'w')
-        //        {
-        //            bool foundCircle = SearchEdgeToRemove(mstGraph, i, src, dest, weight);
-        //            if (foundCircle == true)
-        //            {
-        //                mstGraph.printGraph();
-        //                return;
-        //            }
-        //        }
-        //    }
-        //    mstGraph.RemoveEdge(src, dest);
-        //    mstGraph.printGraph();
-        //}
         public static void Main()
         {
-            var graph = new UndirectedGraph(12);
-            var mst = new UndirectedGraph(12);
+            var graph = new UndirectedGraph(4);
+            var mst = new UndirectedGraph(4);
             GraphBuilder.BuildGraph(graph);
             mst = MST_prim(graph, 0);
-            MstUpdate(mst, 2, 3, 6);
+            MstUpdate(mst, 2, 0, 3);         
         }
     }
 }

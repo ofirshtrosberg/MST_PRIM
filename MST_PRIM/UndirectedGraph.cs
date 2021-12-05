@@ -60,7 +60,7 @@ namespace MST_PRIM
                 {
                     if (this._isEdgeExistMatrix[i, j])
                     {
-                        Console.WriteLine((char)(i+'a')+"-"+(char)(j+'a')+"\t"+this._edgeWeightsMatrix[i,j]);
+                        Console.WriteLine((i)+"-"+(j)+"\t"+this._edgeWeightsMatrix[i,j]);
                     }
                 }
             }
