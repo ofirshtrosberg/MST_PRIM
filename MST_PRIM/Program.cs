@@ -158,11 +158,11 @@ namespace MST_PRIM
         }
         public static void Main()
         {
-            var graph = new UndirectedGraph(4);
-            var mst = new UndirectedGraph(4);
+            var graph = new UndirectedGraph(20);
+            var mst = new UndirectedGraph(20);
             GraphBuilder.BuildGraph(graph);
             mst = MST_prim(graph, 0);
-            MstUpdate(mst, 2, 0, 3);         
+            //MstUpdate(mst, 2, 0, 100);         
         }
     }
 }
