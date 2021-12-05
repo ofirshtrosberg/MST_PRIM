@@ -10,9 +10,6 @@ namespace MST_PRIM
     {
         public int Compare(VertexKeyPair? x, VertexKeyPair? y)
         {
-            if (x.Vertex == 7)
-            {
-            }
             if (x == null && y == null)
             {
                 return 0;

@@ -32,7 +32,7 @@ namespace MST_PRIM
         {
             return this.VerticesList.Find(ver => ver.Vertex == vertex);
         }
-
+       
         private void Resort()
         {
             this.VerticesList.Sort(_vertexComparer);
