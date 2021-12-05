@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Gal Cohen: 314752536
+// Ofir Shtrosberg: 207828641
+using System;
 using System.Collections.Generic;
 
 namespace MST_PRIM
@@ -37,6 +39,7 @@ namespace MST_PRIM
                     }
                 }
             }
+            // need the mst for part 2
             for (int i = 0; i < parents.Length; i++)
             {
                 // if parent is not null
@@ -47,48 +50,13 @@ namespace MST_PRIM
                 }
             }
             mst.printGraph();
-           // graph.PrintMstByParents(parents);
+            // graph.PrintMstByParents(parents);
             return mst;
         }
-        // maybe need to initialize to null all the vertices parents
-        //public static void MST_prim(UndirectedGraph graph, int startVertexIndex)
-        //{
-        //    VertexKeyPair[] keys = new VertexKeyPair[graph.NumOfVertex]; // keys array
-        //    int[] parents = new int[graph.NumOfVertex]; // parents array (pi)
-        //    // initialize all the keys to "infinity"
-        //    for (int i = 0; i < graph.NumOfVertex; i++)
-        //    {
-        //        keys[i] = new VertexKeyPair(i, int.MaxValue);
-        //    }
-        //    // initialize the vertex we start with
-        //    parents[startVertexIndex] = -1; // symbolize null
-        //    keys[startVertexIndex].Key = 0;
-        //    MinVertexQueue verticesQueue = new MinVertexQueue(keys);
-        //    // while queue is not empty
-        //    while (verticesQueue.Count != 0)
-        //    {
-        //        int vertexU = verticesQueue.ExtractMin();
-        //        // for each v in adj[u]
-        //        foreach (int vertexV in graph.GetEdges(vertexU))
-        //        {
-        //            VertexKeyPair foundVertex;
-        //            // if v in queue and w(u,v)<key[v]
-        //            if ((foundVertex = verticesQueue.FindVertex(vertexV)) != null
-        //                && graph.TryGetWeight(vertexU, vertexV, out int uvWeight) 
-        //                && uvWeight < foundVertex.Key)
-        //            {
-        //                parents[vertexV] = vertexU;
-        //                verticesQueue.Update(vertexV, uvWeight);
-        //            }
-        //        }
-        //    }
-        //    graph.PrintMstByParents(parents);
-        //}
         public static List<int> tryFindCircle(UndirectedGraph mstGraph, int parent, List<int> circleList)
         {
             List<int> foundResult = new List<int>();
             mstGraph.setColor(parent, 'g');
-            Console.WriteLine(parent);
             foreach (int vertexV in mstGraph.GetEdges(parent))
             {       
                 if ((mstGraph.getColorOfVertices()[vertexV] == 'g') && (mstGraph.getPi()[parent] != vertexV))
@@ -139,7 +107,6 @@ namespace MST_PRIM
                 //if a circle was found remove the heaviest edge 
                 if (circle.Count != 0)
                 {
-                    Console.WriteLine("circle"+String.Join(",",circle));
                     for (int j = 0; j < circle.Count - 1; j++)
                     {
                         if (mstGraph.TryGetWeight(circle[j], circle[j + 1], out int maxWeightNew)
@@ -158,11 +125,16 @@ namespace MST_PRIM
         }
         public static void Main()
         {
-            var graph = new UndirectedGraph(20);
-            var mst = new UndirectedGraph(20);
+            var graph = new UndirectedGraph(26);
+            var mst = new UndirectedGraph(26);
             GraphBuilder.BuildGraph(graph);
+            Console.WriteLine("part 1, MST of the graph:\n");
             mst = MST_prim(graph, 0);
-            //MstUpdate(mst, 2, 0, 100);         
+            Console.WriteLine("\npart 2, adding edge that doesn'g change the MST\n");
+            MstUpdate(mst, 21, 24, 31);
+            Console.WriteLine("\npart 2, adding edge that changes the MST\n");
+            MstUpdate(mst, 21, 24, 5);
+
         }
     }
 }

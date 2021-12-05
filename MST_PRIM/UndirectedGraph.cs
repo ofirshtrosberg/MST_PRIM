@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Gal Cohen: 314752536
+// Ofir Shtrosberg: 207828641
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -45,9 +47,9 @@ namespace MST_PRIM
         //        {
         //            continue;
         //        }
-        //        char parentLetter = 'a', vertexLetter = 'a';
-        //        parentLetter += (char)parents[i];
-        //        vertexLetter += (char)i;
+        //        //char parentLetter = 'a', vertexLetter = 'a';
+        //        int parentLetter = parents[i];
+        //        int vertexLetter = i;
         //        Console.WriteLine(parentLetter + " - " + vertexLetter + "\t" + _edgeWeightsMatrix[i, parents[i]]);
         //    }
         //}
