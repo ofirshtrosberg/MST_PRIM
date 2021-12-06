@@ -49,37 +49,35 @@ namespace MST_PRIM
                     mst.AddEdge(parents[i], i, weight);
                 }
             }
-            mst.printGraph();
-            // graph.PrintMstByParents(parents);
+            mst.PrintGraph();
             return mst;
         }
-        public static List<int> tryFindCircle(UndirectedGraph mstGraph, int parent, List<int> circleList)
+        public static List<int> TryFindCircle(UndirectedGraph mstGraph, int parent, List<int> circleList)
         {
-            List<int> foundResult = new List<int>();
-            mstGraph.setColor(parent, 'g');
+            mstGraph.SetColor(parent, 'g');
             foreach (int vertexV in mstGraph.GetEdges(parent))
             {       
-                if ((mstGraph.getColorOfVertices()[vertexV] == 'g') && (mstGraph.getPi()[parent] != vertexV))
+                if ((mstGraph.GetColorOfVertices()[vertexV] == 'g') && (mstGraph.GetPi()[parent] != vertexV))
                 {
                     int firstVertexInCircle = vertexV;
                     int pointerToCircle = parent;
                     circleList.Add(vertexV);
                     // the parent of the 
-                    while (pointerToCircle != -1 && pointerToCircle!=mstGraph.getPi()[firstVertexInCircle])
+                    while (pointerToCircle != -1 && pointerToCircle!=mstGraph.GetPi()[firstVertexInCircle])
                     {
                         circleList.Add(pointerToCircle);
-                        pointerToCircle = mstGraph.getPi()[pointerToCircle];
+                        pointerToCircle = mstGraph.GetPi()[pointerToCircle];
                     }
-                    mstGraph.setColor(parent, 'b');
+                    mstGraph.SetColor(parent, 'b');
                     return circleList;
                 }
-                if (mstGraph.getColorOfVertices()[vertexV] == 'w')
+                if (mstGraph.GetColorOfVertices()[vertexV] == 'w')
                 {
-                    mstGraph.setPi(vertexV, parent);
-                    tryFindCircle(mstGraph, vertexV, circleList);
+                    mstGraph.SetPi(vertexV, parent);
+                    TryFindCircle(mstGraph, vertexV, circleList);
                 }
             }
-            mstGraph.setColor(parent, 'b');
+            mstGraph.SetColor(parent, 'b');
             return circleList;
         }
         // Check if the new edge creates a circle in the mst graph.
@@ -95,14 +93,14 @@ namespace MST_PRIM
             // initialize all vertices to be white and their parents to be null (-1)
             for (int i = 0; i < mstGraph.NumOfVertex; i++)
             {
-                mstGraph.setColor(i, 'w');
-                mstGraph.setPi(i, -1); // -1 is like null
+                mstGraph.SetColor(i, 'w');
+                mstGraph.SetPi(i, -1); // -1 is like null
             }
             for (int i = 0; i < mstGraph.NumOfVertex; i++)
             {
-                if (mstGraph.getColorOfVertices()[i] == 'w')
+                if (mstGraph.GetColorOfVertices()[i] == 'w')
                 {
-                    circle = tryFindCircle(mstGraph, i, findCircle);
+                    circle = TryFindCircle(mstGraph, i, findCircle);
                 }
                 //if a circle was found remove the heaviest edge 
                 if (circle.Count != 0)
@@ -118,7 +116,7 @@ namespace MST_PRIM
                         }
                     }
                     mstGraph.RemoveEdge(firstIndex, secondIndex);
-                    mstGraph.printGraph();
+                    mstGraph.PrintGraph();
                     return;
                 }
             }
@@ -128,11 +126,15 @@ namespace MST_PRIM
             var graph = new UndirectedGraph(26);
             var mst = new UndirectedGraph(26);
             GraphBuilder.BuildGraph(graph);
-            Console.WriteLine("part 1, MST of the graph:\n");
+            Console.WriteLine("The graph:\n");
+            graph.PrintGraph();
+            Console.WriteLine("\npart 1, MST of the graph:\n");
             mst = MST_prim(graph, 0);
             Console.WriteLine("\npart 2, adding edge that doesn'g change the MST\n");
+            Console.WriteLine("Edge is 21-24, weight is 31\n");
             MstUpdate(mst, 21, 24, 31);
             Console.WriteLine("\npart 2, adding edge that changes the MST\n");
+            Console.WriteLine("Edge is 21-24, weight is 5\n");
             MstUpdate(mst, 21, 24, 5);
 
         }

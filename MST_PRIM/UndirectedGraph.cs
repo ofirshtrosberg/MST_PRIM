@@ -38,22 +38,7 @@ namespace MST_PRIM
             }
             return edges;
         }
-        //public void PrintMstByParents(int[] parents)
-        //{
-        //    Console.WriteLine("Edge \tWeight");
-        //    for (int i = 0; i < NumOfVertex; i++)
-        //    {
-        //        if (parents[i] >= NumOfVertex || parents[i] < 0)
-        //        {
-        //            continue;
-        //        }
-        //        //char parentLetter = 'a', vertexLetter = 'a';
-        //        int parentLetter = parents[i];
-        //        int vertexLetter = i;
-        //        Console.WriteLine(parentLetter + " - " + vertexLetter + "\t" + _edgeWeightsMatrix[i, parents[i]]);
-        //    }
-        //}
-        public void printGraph()
+        public void PrintGraph()
         {
             Console.WriteLine("Edge \tWeight");
             for (int i = 0; i <this.NumOfVertex; i++)

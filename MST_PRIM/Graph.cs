@@ -24,22 +24,22 @@ namespace MST_PRIM
             _pi = new int[numOfVertex];
 
         }
-        public char[] getColorOfVertices()
+        public char[] GetColorOfVertices()
         {
             return this._colorOfVertices;
         }
-        public void setColor(int index, char color)
+        public void SetColor(int index, char color)
         {
             if (index < _numOfVertex)
             {
                 this._colorOfVertices[index] = color;
             }
         }
-        public int[] getPi()
+        public int[] GetPi()
         {
             return this._pi;
         }
-        public void setPi(int vertex, int parent) 
+        public void SetPi(int vertex, int parent) 
         {
             if (vertex < _numOfVertex)
             {
@@ -56,7 +56,7 @@ namespace MST_PRIM
         {
             _isEdgeExistMatrix[src, dest] = false;
         }
-        // why out and why int and not double??????
+        
         public bool TryGetWeight(int src, int dest, out int weight)
         {
             if (src >= 0 && dest >= 0)
